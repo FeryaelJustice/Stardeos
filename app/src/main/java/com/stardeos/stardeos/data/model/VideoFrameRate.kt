@@ -1,4 +1,4 @@
-package com.stardeos.stardeos.model
+package com.stardeos.stardeos.data.model
 
 enum class VideoFrameRate(val frameRate: Int) {
     NORMAL(30),

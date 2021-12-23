@@ -65,9 +65,10 @@ private val DarkThemeColors = darkColorScheme(
 
 @Composable
 fun StardeosTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    useDarkTheme: Boolean,
     content: @Composable() () -> Unit
 ) {
+    // = isSystemInDarkTheme()
     val colors = if (!useDarkTheme) {
         LightThemeColors
     } else {

@@ -1,4 +1,4 @@
-package com.stardeos.stardeos.model
+package com.stardeos.stardeos.data.model
 
 data class Video(
     val id: Int,

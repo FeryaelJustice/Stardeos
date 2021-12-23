@@ -24,7 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.stardeos.stardeos.model.*
+import com.stardeos.stardeos.data.model.*
 import com.stardeos.stardeos.ui.navigation.Screen
 import com.stardeos.stardeos.ui.navigation.searchScreenNavName
 import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel

@@ -1,4 +1,4 @@
-package com.stardeos.stardeos.model
+package com.stardeos.stardeos.data.model
 
 enum class VideoResolution(val pixels: Int){
     SUPER_LOW(144),

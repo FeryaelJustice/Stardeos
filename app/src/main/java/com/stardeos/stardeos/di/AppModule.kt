@@ -6,11 +6,6 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {
+object AppModule {
 
-    /*
-    @Singleton
-    @Inject
-    lateinit var stardeosApp: Stardeos
-     */
 }
