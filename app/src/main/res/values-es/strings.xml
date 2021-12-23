@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stardeos">stardeos</string>
+    <string name="app">app</string>
+    <string name="splashScreen">splashScreen</string>
+    <string name="loginScreen">loginScreen</string>
+    <string name="registerScreen">registerScreen</string>
+    <string name="recoverPasswordScreen">recoverPasswordScreen</string>
+    <string name="trendsScreen">trendsScreen</string>
+    <string name="videoScreen">videoScreen</string>
+    <string name="searchScreen">videoScreen</string>
+    <string name="configScreen">configScreen</string>
+    <string name="preferencesScreen">preferencesScreen</string>
+    <string name="editProfileScreen">editProfileScreen</string>
+    <string name="followingScreen">followingScreen</string>
+    <string name="email">Correo</string>
+    <string name="password">Contraseña</string>
+    <string name="invalidCredentials">¡Credenciales inválidas!</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="forgotpassword">¿Olvidaste tu contraseña?</string>
+    <string name="registerAd">¿Todavía no tienes una cuenta? Regístrate aquí.</string>
+    <string name="repeatPassword">Repetir contraseña</string>
+    <string name="register">Registrarse</string>
+    <string name="sendRecoverEmail">Enviar correo de recuperación</string>
+    <string name="video">Video</string>
+</resources>
