@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,10 +48,11 @@ fun NavigationHost(
     scope: CoroutineScope,
     stardeosViewModel: StardeosViewModel
 ) {
+    // Current destination
     val currentDestination = currentDestination(navController)
     if ((currentDestination?.route == Screen.Trends.route) || (currentDestination?.route == Screen.Following.route) || (currentDestination?.route == Screen.EditProfile.route)) {
         Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosTopBar(navController = navController)
+            StardeosTopBar(navController = navController, stardeosViewModel = stardeosViewModel)
         }, bottomBar = {
             StardeosBottomNav(
                 items = stardeosBottomNavItems(),
@@ -77,7 +79,7 @@ fun NavigationHost(
         }
     } else if (currentDestination?.route == Screen.Video.route) {
         Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosTopBar(navController = navController)
+            StardeosTopBar(navController = navController, stardeosViewModel = stardeosViewModel)
         }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -94,7 +96,11 @@ fun NavigationHost(
         }
     } else if (currentDestination?.route == Screen.Config.route) {
         Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosSecondaryTopBar(navController = navController, configScreenNavName)
+            StardeosSecondaryTopBar(
+                navController = navController,
+                screenName = configScreenNavName,
+                stardeosViewModel = stardeosViewModel
+            )
         }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -111,7 +117,11 @@ fun NavigationHost(
         }
     } else if (currentDestination?.route == Screen.Preferences.route) {
         Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosSecondaryTopBar(navController = navController, preferencesScreenNavName)
+            StardeosSecondaryTopBar(
+                navController = navController,
+                screenName = preferencesScreenNavName,
+                stardeosViewModel = stardeosViewModel
+            )
         }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -281,9 +291,17 @@ fun navigateTo(
     }
 }
 
+fun navigateTo(navController: NavHostController, navigateTo: String){
+    navController.navigate(navigateTo) {
+        // Clear backstack
+        popUpTo(0)
+        launchSingleTop = true
+    }
+}
+
 // TopBar
 @Composable
-fun StardeosTopBar(navController: NavHostController) {
+fun StardeosTopBar(navController: NavHostController, stardeosViewModel: StardeosViewModel) {
     val currentDestination = currentDestination(navController)
     TopAppBar(
         title = {
@@ -353,7 +371,11 @@ fun StardeosTopBar(navController: NavHostController) {
 }
 
 @Composable
-fun StardeosSecondaryTopBar(navController: NavHostController, screenName: String) {
+fun StardeosSecondaryTopBar(
+    navController: NavHostController,
+    screenName: String,
+    stardeosViewModel: StardeosViewModel
+) {
     val currentDestination = currentDestination(navController)
     TopAppBar(
         title = {
@@ -361,12 +383,16 @@ fun StardeosSecondaryTopBar(navController: NavHostController, screenName: String
         },
         navigationIcon = {
             IconButton(onClick = {
-                if (currentDestination?.route == Screen.Config.route) {
-                    navigateTo(currentDestination, navController, Screen.Trends.route)
-                } else if (currentDestination?.route == Screen.Preferences.route) {
-                    navigateTo(currentDestination, navController, Screen.Config.route)
-                } else {
-                    navigateTo(currentDestination, navController, Screen.Trends.route)
+                when (currentDestination?.route) {
+                    Screen.Config.route -> {
+                        navigateTo(currentDestination, navController, Screen.Trends.route)
+                    }
+                    Screen.Preferences.route -> {
+                        navigateTo(currentDestination, navController, Screen.Config.route)
+                    }
+                    else -> {
+                        navigateTo(currentDestination, navController, Screen.Trends.route)
+                    }
                 }
             }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -378,6 +404,7 @@ fun StardeosSecondaryTopBar(navController: NavHostController, screenName: String
                 Text(
                     text = signOut,
                     modifier = Modifier.clickable {
+                        stardeosViewModel.setStateLogged(false)
                         navController.navigate(Screen.Login.route) {
                             // Clear backstack
                             popUpTo(0)

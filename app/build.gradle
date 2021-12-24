@@ -62,10 +62,18 @@ dependencies {
     // Material You
     implementation("androidx.compose.material3:material3:1.0.0-alpha02")
     implementation "androidx.compose.ui:ui:1.1.0-rc01"
+    // Compose
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.activity:activity-compose:1.4.0"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
+
+    // Coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    // Coroutine Lifecycle Scopes
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
 
     // TESTING
     testImplementation 'junit:junit:4.13.2'
@@ -81,10 +89,6 @@ dependencies {
 
     // CUSTOM
 
-    // Compose
-    implementation "androidx.activity:activity-compose:1.4.0"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
-
     // Reflect
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.0"
 
@@ -99,6 +103,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.4.0-rc01")
 
     // Preferences DataStore
+    implementation("androidx.datastore:datastore:1.0.0")
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // System UI Controller

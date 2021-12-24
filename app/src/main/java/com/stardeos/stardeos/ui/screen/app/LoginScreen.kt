@@ -69,6 +69,7 @@ fun LoginScreen(
             )
             Button(colors = StardeosButtonColors(), onClick = {
                 if (checkCredentials(email, password)) {
+                    stardeosViewModel.setStateLogged(true)
                     navController.navigate(Screen.Trends.route) {
                         // Clear backstack
                         popUpTo(0)

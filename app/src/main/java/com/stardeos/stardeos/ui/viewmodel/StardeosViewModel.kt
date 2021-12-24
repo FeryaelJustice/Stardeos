@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.stardeos.stardeos.data.model.LoginViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -28,7 +29,11 @@ class StardeosViewModel @Inject constructor() : ViewModel() {
     // LoginViewModelState
     private val _state = MutableLiveData<LoginViewModelState>()
     val state: LiveData<LoginViewModelState> get() = _state
+
     // Emit new state like this: _state.value = _state.value!!.copy(checking = true)
+    fun setStateLogged(isLogged: Boolean) {
+        _state.value = _state.value!!.copy(logged = isLogged)
+    }
 
     // Init
     init {
