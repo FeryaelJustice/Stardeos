@@ -1,4 +1,3 @@
 package com.stardeos.stardeos.domain.stardeos
 
-class UserUseCase {
-}
+class UserUseCase

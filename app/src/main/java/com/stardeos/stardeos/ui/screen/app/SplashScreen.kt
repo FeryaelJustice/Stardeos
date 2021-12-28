@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.stardeos.stardeos.R
 import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
-import com.stardeos.stardeos.ui.navigation.loginScreen
+import com.stardeos.stardeos.ui.navigation.loginScreenRoute
 import com.stardeos.stardeos.ui.navigation.navigateToClearingBackstack
 import com.stardeos.stardeos.ui.viewmodel.app.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -42,7 +42,7 @@ fun SplashScreen(
                 easing = { OvershootInterpolator(2f).getInterpolation(it) })
         )
         delay(1000L)
-        navigateToClearingBackstack(navController, loginScreen)
+        navigateToClearingBackstack(navController, loginScreenRoute)
     }
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         Image(

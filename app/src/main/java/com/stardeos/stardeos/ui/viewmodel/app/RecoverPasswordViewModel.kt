@@ -5,5 +5,4 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RecoverPasswordViewModel @Inject constructor(): ViewModel()  {
-}
+class RecoverPasswordViewModel @Inject constructor(): ViewModel()

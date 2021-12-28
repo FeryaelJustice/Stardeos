@@ -4,6 +4,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
@@ -20,7 +21,8 @@ fun ConfigScreen(
     viewModel: ConfigViewModel,
     settingsSharedPreferences: SettingsSharedPreferences
 ) {
-    Text(text = configScreenNavName)
+    val context = LocalContext.current
+    Text(text = configScreenNavName(context))
     Button(
         colors = StardeosButtonColors(),
         onClick = { navController.navigate(Screen.Preferences.route) }) {

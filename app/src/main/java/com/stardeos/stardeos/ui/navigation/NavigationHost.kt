@@ -1,5 +1,6 @@
 package com.stardeos.stardeos.ui.navigation
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,6 +51,7 @@ fun NavigationHost(
 ) {
     // Current destination
     val currentDestination = currentDestination(navController)
+    val context = LocalContext.current
     if ((currentDestination?.route == Screen.Trends.route) || (currentDestination?.route == Screen.Following.route)
         || (currentDestination?.route == Screen.EditProfile.route || (currentDestination?.route == Screen.Search.route)
                 || (currentDestination?.route == Screen.Video.route) || (currentDestination?.route == Screen.Config.route)
@@ -59,13 +62,14 @@ fun NavigationHost(
             StardeosTopBar(
                 navController = navController,
                 currentDestination = currentDestination,
-                settingsSharedPreferences = settingsSharedPreferences
+                settingsSharedPreferences = settingsSharedPreferences,
+                context = context
             )
         }, bottomBar = {
             if ((currentDestination.route == Screen.Trends.route) || (currentDestination.route == Screen.Following.route) || (currentDestination.route == Screen.EditProfile.route)
             ) {
                 StardeosBottomNav(
-                    items = stardeosBottomNavItems(),
+                    items = stardeosBottomNavItems(context = context),
                     navController = navController,
                     onItemClick = {
                         // Prevent recreating the screen if we are already in it
@@ -278,7 +282,8 @@ fun navigateToClearingBackstack(navController: NavHostController, navigateTo: St
 fun StardeosTopBar(
     navController: NavHostController,
     currentDestination: NavDestination,
-    settingsSharedPreferences: SettingsSharedPreferences
+    settingsSharedPreferences: SettingsSharedPreferences,
+    context: Context
 ) {
     TopAppBar(
         title = {
@@ -291,7 +296,7 @@ fun StardeosTopBar(
                             navigateToClearingBackstack(
                                 currentDestination,
                                 navController,
-                                trendsScreen
+                                trendsScreenRoute
                             )
                         }
                 )
@@ -309,7 +314,7 @@ fun StardeosTopBar(
                             navigateToClearingBackstack(
                                 currentDestination,
                                 navController,
-                                trendsScreen
+                                trendsScreenRoute
                             )
                         }
                 )
@@ -320,21 +325,21 @@ fun StardeosTopBar(
                             navigateToClearingBackstack(
                                 currentDestination,
                                 navController,
-                                trendsScreen
+                                trendsScreenRoute
                             )
                         }
                         Screen.Preferences.route -> {
                             navigateToClearingBackstack(
                                 currentDestination,
                                 navController,
-                                configScreen
+                                configScreenRoute
                             )
                         }
                         else -> {
                             navigateToClearingBackstack(
                                 currentDestination,
                                 navController,
-                                trendsScreen
+                                trendsScreenRoute
                             )
                         }
                     }
@@ -372,13 +377,13 @@ fun StardeosTopBar(
             } else {
                 if (currentDestination.route == Screen.Config.route) {
                     Text(
-                        text = signOut,
+                        text = logoutText(context),
                         modifier = Modifier.clickable {
                             settingsSharedPreferences.setBoolean(
                                 SettingsSharedPreferences.isLoggedKey,
                                 false
                             )
-                            navigateToClearingBackstack(navController, loginScreen)
+                            navigateToClearingBackstack(navController, loginScreenRoute)
                         })
                 }
             }
@@ -424,21 +429,21 @@ fun StardeosBottomNav(
     }
 }
 
-fun stardeosBottomNavItems(): List<StardeosBottomNavItem> {
+fun stardeosBottomNavItems(context: Context): List<StardeosBottomNavItem> {
     return listOf(
         StardeosBottomNavItem(
-            name = trendsScreenNavName,
-            route = trendsScreen,
+            name = trendsScreenNavName(context),
+            route = trendsScreenRoute,
             Icons.Default.Favorite
         ),
         StardeosBottomNavItem(
-            name = followingScreenNavName,
-            route = followingScreen,
+            name = followingScreenNavName(context),
+            route = followingScreenRoute,
             Icons.Default.Face
         ),
         StardeosBottomNavItem(
-            name = editProfileScreenNavName,
-            route = editProfileScreen,
+            name = editProfileScreenNavName(context),
+            route = editProfileScreenRoute,
             Icons.Default.Person
         )
     )

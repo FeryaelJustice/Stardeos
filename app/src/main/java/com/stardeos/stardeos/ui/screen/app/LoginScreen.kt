@@ -25,7 +25,7 @@ import com.stardeos.stardeos.R
 import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
 import com.stardeos.stardeos.ui.navigation.navigateToClearingBackstack
-import com.stardeos.stardeos.ui.navigation.trendsScreen
+import com.stardeos.stardeos.ui.navigation.trendsScreenRoute
 import com.stardeos.stardeos.ui.util.StardeosButtonColors
 import com.stardeos.stardeos.ui.viewmodel.app.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -72,7 +72,7 @@ fun LoginScreen(
             )
             Button(colors = StardeosButtonColors(), onClick = {
                 if (checkCredentials(email, password)) {
-                    navigateToClearingBackstack(navController, trendsScreen)
+                    navigateToClearingBackstack(navController, trendsScreenRoute)
                     scope.launch {
                         scaffoldState.snackbarHostState.showSnackbar("Welcome to Stardeos")
                     }
@@ -113,6 +113,6 @@ private fun checkIsLogged(
     val isLogged =
         settingsSharedPreferences.getBoolean(SettingsSharedPreferences.isLoggedKey)
     if (isLogged) {
-        navigateToClearingBackstack(navController, trendsScreen)
+        navigateToClearingBackstack(navController, trendsScreenRoute)
     }
 }

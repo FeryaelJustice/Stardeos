@@ -24,4 +24,11 @@
     <string name="register">Registrarse</string>
     <string name="sendRecoverEmail">Enviar correo de recuperación</string>
     <string name="video">Video</string>
+    <string name="trendsScreenNavName">Tendencias</string>
+    <string name="followingScreenNavName">Siguiendo</string>
+    <string name="editProfileScreenNavName">Editar Perfil</string>
+    <string name="videoScreenNavName">Video</string>
+    <string name="searchScreenNavName">Buscar</string>
+    <string name="configScreenNavName">Configuracion</string>
+    <string name="preferencesScreenNavName">Preferencias</string>
 </resources>

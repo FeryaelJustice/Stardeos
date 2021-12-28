@@ -1,11 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Stardeos</string>
-
-    <!-- Screens -->
-    <!-- NESTED -->
     <string name="stardeos">stardeos</string>
     <string name="app">app</string>
-    <!-- SCREENS -->
     <string name="splashScreen">splashScreen</string>
     <string name="loginScreen">loginScreen</string>
     <string name="registerScreen">registerScreen</string>
@@ -35,12 +31,4 @@
     <string name="searchScreenNavName">Search</string>
     <string name="configScreenNavName">Config</string>
     <string name="preferencesScreenNavName">Preferences</string>
-    <!-- STILL NOT USED -->
-    <!--
-    <string name="editChannelScreen">editChannelScreen</string>
-    <string name="channelScreen">channelScreen</string>
-    <string name="profileScreen">profileScreen</string>
-    -->
-
-
 </resources>

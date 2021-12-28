@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +42,7 @@ fun SearchScreen(
     settingsSharedPreferences: SettingsSharedPreferences
 ) {
     //val query = viewModel.query.value
+    val context = LocalContext.current
     val query = remember { mutableStateOf("") }
     val videos = listOf(
         Video(
@@ -128,7 +130,7 @@ fun SearchScreen(
                 Card {
                     LazyRow {
                         items(1) {
-                            Text(text = "Index:$index $searchScreenNavName - ${video.title}")
+                            Text(text = "Index:$index ${searchScreenNavName(context = context)} - ${video.title}")
                             Text(text = video.description)
                         }
                     }

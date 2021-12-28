@@ -1,80 +1,88 @@
 package com.stardeos.stardeos.ui.navigation
 
+import android.content.Context
 import androidx.annotation.StringRes
 import com.stardeos.stardeos.R
 
-// ALL INSIDE A MAINACTIVITY Kotlin Class Container
+// ALL INSIDE A MAIN ACTIVITY Kotlin Class Container
+// NOTE: fun for variable international adaptation, const val ROUTERS for internal names
 
+// Providing common names for navigation:
 // NESTED
 
+// "stardeos"
 const val stardeos = "stardeos"
 const val app = "app"
 
 // SCREENS
 
 // MAIN
-const val splashScreen = "splashScreen"
-const val loginScreen = "loginScreen"
-const val signOut = "Sign Out"
-const val registerScreen = "registerScreen"
-const val recoverPasswordScreen = "recoverPasswordScreen"
+const val splashScreenRoute = "splashScreen"
+const val loginScreenRoute = "loginScreen"
+fun logoutText(context: Context) = context.getString(R.string.logout)
+const val registerScreenRoute = "registerScreen"
+const val recoverPasswordScreenRoute = "recoverPasswordScreen"
 
 // APP SCREENS
 // Videos screen (main in-app)
-const val trendsScreen = "trendsScreen"
-const val trendsScreenNavName = "Trends"
+const val trendsScreenRoute = "trendsScreen"
+fun trendsScreenNavName(context: Context) = context.getString(R.string.trendsScreenNavName)
 
 // Following (user or creator)
-const val followingScreen = "followingScreen"
-const val followingScreenNavName = "Following"
+const val followingScreenRoute = "followingScreen"
+fun followingScreenNavName(context: Context) = context.getString(R.string.followingScreenNavName)
 
 // Edit Profile (user or creator)
-const val editProfileScreen = "editProfileScreen"
-const val editProfileScreenNavName = "Profile"
+const val editProfileScreenRoute = "editProfileScreen"
+fun editProfileScreenNavName(context: Context) =
+    context.getString(R.string.editProfileScreenNavName)
 
 // Video screen
-const val videoScreen = "videoScreen"
-const val videoScreenNavName = "Video"
+const val videoScreenRoute = "videoScreen"
+fun videoScreenNavName(context: Context) = context.getString(R.string.videoScreenNavName)
 
 // Search screen
-const val searchScreen = "searchScreen"
-const val searchScreenNavName = "Search"
+const val searchScreenRoute = "searchScreen"
+fun searchScreenNavName(context: Context) = context.getString(R.string.searchScreenNavName)
 
 // Config screen (container for preferencesScreen and editProfileScreen)
-const val configScreen = "configScreen"
-const val configScreenNavName = "Config"
+const val configScreenRoute = "configScreen"
+fun configScreenNavName(context: Context) = context.getString(R.string.configScreenNavName)
 
 // Preferences screen (app related, not user)
-const val preferencesScreen = "preferencesScreen"
-const val preferencesScreenNavName = "Preferences"
+const val preferencesScreenRoute = "preferencesScreen"
+fun preferencesScreenNavName(context: Context) =
+    context.getString(R.string.preferencesScreenNavName)
 
 // STILL NOT USED
 /*
 // Edit Channel (creator)
-const val editChannelScreen = "editChannelScreen"
+fun editChannelScreenRoute(context: Context) = "editChannelScreen"
 // Creator profile screen (channel)
-const val channelScreen = "channelScreen"
+fun channelScreenRoute(context: Context) = "channelScreen"
 // User profile screen (no creator)
-const val profileScreen = "profileScreen"
+fun profileScreenRoute(context: Context) = "profileScreen"
 */
 
-// resourceId: For BottomNavigation
+
+// SCREEN ROUTES
+// resourceId: Can be used for BottomNavigation (optional)
 sealed class Screen(val route: String, @StringRes val resourceId: Int?) {
 
     // Stardeos
-    object Splash : Screen(splashScreen, R.string.splashScreen)
-    object Login : Screen(loginScreen, R.string.loginScreen)
-    object Register : Screen(registerScreen, R.string.registerScreen)
-    object RecoverPassword : Screen(recoverPasswordScreen, R.string.recoverPasswordScreen)
+    object Splash : Screen(splashScreenRoute, R.string.splashScreen)
+    object Login : Screen(loginScreenRoute, R.string.loginScreen)
+    object Register : Screen(registerScreenRoute, R.string.registerScreen)
+    object RecoverPassword : Screen(recoverPasswordScreenRoute, R.string.recoverPasswordScreen)
 
     // App
-    object Trends : Screen(trendsScreen, R.string.trendsScreen)
-    object Following : Screen(followingScreen, R.string.followingScreen)
-    object EditProfile : Screen(editProfileScreen, R.string.editProfileScreen)
-    object Video : Screen(videoScreen, R.string.videoScreen)
-    object Search : Screen(searchScreen, R.string.searchScreen)
-    object Config : Screen(configScreen, R.string.configScreen)
-    object Preferences : Screen(preferencesScreen, R.string.preferencesScreen)
+    object Trends : Screen(trendsScreenRoute, R.string.trendsScreen)
+    object Following : Screen(followingScreenRoute, R.string.followingScreen)
+    object EditProfile : Screen(editProfileScreenRoute, R.string.editProfileScreen)
+    object Video : Screen(videoScreenRoute, R.string.videoScreen)
+    object Search : Screen(searchScreenRoute, R.string.searchScreen)
+    object Config : Screen(configScreenRoute, R.string.configScreen)
+    object Preferences : Screen(preferencesScreenRoute, R.string.preferencesScreen)
 
     // Still unused
     /*
