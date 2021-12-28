@@ -228,55 +228,6 @@ fun NavGraphBuilder.graph(
     }
 }
 
-// NAVIGATION
-
-// Get current destination
-@Composable
-fun currentDestination(navController: NavHostController): NavDestination? {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.destination
-}
-
-// Navigate with backstack
-/*
-fun navigateTo(
-    currentDestination: NavDestination?,
-    navController: NavHostController,
-    navigateToRoute: String
-) {
-    if (currentDestination?.route != navigateToRoute) {
-        navController.navigate(navigateToRoute)
-    }
-}
-
-fun navigateTo(navController: NavHostController, navigateTo: String) {
-    navController.navigate(navigateTo)
-}
-*/
-
-// Navigate without backstack
-fun navigateToClearingBackstack(
-    currentDestination: NavDestination?,
-    navController: NavHostController,
-    navigateToRoute: String
-) {
-    if (currentDestination?.route != navigateToRoute) {
-        navController.navigate(navigateToRoute) {
-            // Clear backstack
-            popUpTo(0)
-            launchSingleTop = true
-        }
-    }
-}
-
-fun navigateToClearingBackstack(navController: NavHostController, navigateTo: String) {
-    navController.navigate(navigateTo) {
-        // Clear backstack
-        popUpTo(0)
-        launchSingleTop = true
-    }
-}
-
 // TOP BAR
 @Composable
 fun StardeosTopBar(
@@ -447,4 +398,53 @@ fun stardeosBottomNavItems(context: Context): List<StardeosBottomNavItem> {
             Icons.Default.Person
         )
     )
+}
+
+// NAVIGATION
+
+// Get current destination
+@Composable
+fun currentDestination(navController: NavHostController): NavDestination? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination
+}
+
+// Navigate with backstack
+/*
+fun navigateTo(
+    currentDestination: NavDestination?,
+    navController: NavHostController,
+    navigateToRoute: String
+) {
+    if (currentDestination?.route != navigateToRoute) {
+        navController.navigate(navigateToRoute)
+    }
+}
+
+fun navigateTo(navController: NavHostController, navigateTo: String) {
+    navController.navigate(navigateTo)
+}
+*/
+
+// Navigate without backstack
+fun navigateToClearingBackstack(
+    currentDestination: NavDestination?,
+    navController: NavHostController,
+    navigateToRoute: String
+) {
+    if (currentDestination?.route != navigateToRoute) {
+        navController.navigate(navigateToRoute) {
+            // Clear backstack
+            popUpTo(0)
+            launchSingleTop = true
+        }
+    }
+}
+
+fun navigateToClearingBackstack(navController: NavHostController, navigateTo: String) {
+    navController.navigate(navigateTo) {
+        // Clear backstack
+        popUpTo(0)
+        launchSingleTop = true
+    }
 }
