@@ -20,11 +20,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.stardeos.stardeos.R
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
+import com.stardeos.stardeos.ui.navigation.navigateToClearingBackstack
+import com.stardeos.stardeos.ui.navigation.trendsScreen
 import com.stardeos.stardeos.ui.util.StardeosButtonColors
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
 import com.stardeos.stardeos.ui.viewmodel.app.LoginViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -32,12 +34,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     scaffoldState: ScaffoldState,
-    navController: NavController,
+    navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel,
-    viewModel: LoginViewModel
+    viewModel: LoginViewModel,
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
+    checkIsLogged(settingsSharedPreferences, navController)
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -69,17 +72,14 @@ fun LoginScreen(
             )
             Button(colors = StardeosButtonColors(), onClick = {
                 if (checkCredentials(email, password)) {
-                    stardeosViewModel.setStateLogged(true)
-                    navController.navigate(Screen.Trends.route) {
-                        // Clear backstack
-                        popUpTo(0)
-                        launchSingleTop = true
-                    }
+                    navigateToClearingBackstack(navController, trendsScreen)
                     scope.launch {
                         scaffoldState.snackbarHostState.showSnackbar("Welcome to Stardeos")
                     }
-                    // SharedPreferences login
-                    //settingsViewModel.setIsLogged(true)
+                    settingsSharedPreferences.setBoolean(
+                        SettingsSharedPreferences.isLoggedKey,
+                        true
+                    )
                 } else {
                     Toast.makeText(
                         context,
@@ -104,4 +104,15 @@ fun LoginScreen(
 
 fun checkCredentials(email: String, password: String): Boolean {
     return email.isNotBlank() && password.isNotBlank()
+}
+
+private fun checkIsLogged(
+    settingsSharedPreferences: SettingsSharedPreferences,
+    navController: NavHostController
+) {
+    val isLogged =
+        settingsSharedPreferences.getBoolean(SettingsSharedPreferences.isLoggedKey)
+    if (isLogged) {
+        navigateToClearingBackstack(navController, trendsScreen)
+    }
 }

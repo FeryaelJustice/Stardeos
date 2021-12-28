@@ -22,20 +22,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.stardeos.stardeos.R
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
+import com.stardeos.stardeos.ui.util.StardeosButtonColors
 import com.stardeos.stardeos.ui.viewmodel.app.RegisterViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun RegisterScreen(
     scaffoldState: ScaffoldState,
-    navController: NavController,
+    navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel,
-    viewModel: RegisterViewModel
+    viewModel: RegisterViewModel,
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
     LazyColumn(
@@ -76,7 +77,7 @@ fun RegisterScreen(
                 label = { Text(text = stringResource(id = R.string.repeatPassword)) }
             )
 
-            Button(onClick = {
+            Button(colors = StardeosButtonColors(), onClick = {
                 if (register(email, password, repeatPassword)) {
                     navController.navigate(Screen.Trends.route) {
                         // Clear backstack

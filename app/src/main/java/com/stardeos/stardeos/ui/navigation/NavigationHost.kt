@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,7 @@ import com.stardeos.stardeos.ui.screen.app.RegisterScreen
 import com.stardeos.stardeos.ui.screen.app.SplashScreen
 import com.stardeos.stardeos.ui.screen.stardeos.*
 import com.stardeos.stardeos.R
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import kotlinx.coroutines.CoroutineScope
 
 // MAIN NAVIGATION
@@ -46,40 +45,35 @@ fun NavigationHost(
     scaffoldState: ScaffoldState,
     navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     // Current destination
     val currentDestination = currentDestination(navController)
-    if ((currentDestination?.route == Screen.Trends.route) || (currentDestination?.route == Screen.Following.route) || (currentDestination?.route == Screen.EditProfile.route)) {
+    if ((currentDestination?.route == Screen.Trends.route) || (currentDestination?.route == Screen.Following.route)
+        || (currentDestination?.route == Screen.EditProfile.route || (currentDestination?.route == Screen.Search.route)
+                || (currentDestination?.route == Screen.Video.route) || (currentDestination?.route == Screen.Config.route)
+                || (currentDestination?.route == Screen.Preferences.route))
+    ) {
+        // Inside account screens (with app bar)
         Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosTopBar(navController = navController, stardeosViewModel = stardeosViewModel)
+            StardeosTopBar(
+                navController = navController,
+                currentDestination = currentDestination,
+                settingsSharedPreferences = settingsSharedPreferences
+            )
         }, bottomBar = {
-            StardeosBottomNav(
-                items = stardeosBottomNavItems(),
-                navController = navController,
-                onItemClick = {
-                    // Prevent recreating the screen if we are already in it
-                    if (currentDestination.route != it.route) {
-                        navController.navigate(it.route)
-                    }
-                })
-        }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = stardeos,
-                modifier = Modifier.padding(innerPadding)
+            if ((currentDestination.route == Screen.Trends.route) || (currentDestination.route == Screen.Following.route) || (currentDestination.route == Screen.EditProfile.route)
             ) {
-                graph(
-                    scaffoldState = scaffoldState,
+                StardeosBottomNav(
+                    items = stardeosBottomNavItems(),
                     navController = navController,
-                    scope = scope,
-                    stardeosViewModel = stardeosViewModel
-                )
+                    onItemClick = {
+                        // Prevent recreating the screen if we are already in it
+                        if (currentDestination.route != it.route) {
+                            navController.navigate(it.route)
+                        }
+                    })
             }
-        }
-    } else if (currentDestination?.route == Screen.Video.route) {
-        Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosTopBar(navController = navController, stardeosViewModel = stardeosViewModel)
         }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
             NavHost(
                 navController = navController,
@@ -90,53 +84,12 @@ fun NavigationHost(
                     scaffoldState = scaffoldState,
                     navController = navController,
                     scope = scope,
-                    stardeosViewModel = stardeosViewModel
-                )
-            }
-        }
-    } else if (currentDestination?.route == Screen.Config.route) {
-        Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosSecondaryTopBar(
-                navController = navController,
-                screenName = configScreenNavName,
-                stardeosViewModel = stardeosViewModel
-            )
-        }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = stardeos,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                graph(
-                    scaffoldState = scaffoldState,
-                    navController = navController,
-                    scope = scope,
-                    stardeosViewModel = stardeosViewModel
-                )
-            }
-        }
-    } else if (currentDestination?.route == Screen.Preferences.route) {
-        Scaffold(scaffoldState = scaffoldState, topBar = {
-            StardeosSecondaryTopBar(
-                navController = navController,
-                screenName = preferencesScreenNavName,
-                stardeosViewModel = stardeosViewModel
-            )
-        }, backgroundColor = MaterialTheme.colors.background) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = stardeos,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                graph(
-                    scaffoldState = scaffoldState,
-                    navController = navController,
-                    scope = scope,
-                    stardeosViewModel = stardeosViewModel
+                    settingsSharedPreferences = settingsSharedPreferences
                 )
             }
         }
     } else {
+        // App screens (no app bar)
         Scaffold(
             scaffoldState = scaffoldState,
             backgroundColor = MaterialTheme.colors.background
@@ -150,20 +103,21 @@ fun NavigationHost(
                     scaffoldState = scaffoldState,
                     navController = navController,
                     scope = scope,
-                    stardeosViewModel = stardeosViewModel
+                    settingsSharedPreferences = settingsSharedPreferences
                 )
             }
         }
     }
 }
 
+// Routes
 @ExperimentalComposeUiApi
 @ExperimentalCoilApi
 fun NavGraphBuilder.graph(
     scaffoldState: ScaffoldState,
     navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     navigation(startDestination = Screen.Splash.route, route = stardeos) {
         composable(route = Screen.Splash.route) {
@@ -171,8 +125,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Login.route) {
@@ -180,8 +134,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Register.route) {
@@ -189,8 +143,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.RecoverPassword.route) {
@@ -198,8 +152,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
     }
@@ -209,8 +163,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Following.route) {
@@ -218,8 +172,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.EditProfile.route) {
@@ -227,8 +181,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Video.route) {
@@ -236,8 +190,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Search.route) {
@@ -245,8 +199,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Config.route) {
@@ -254,8 +208,8 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
         composable(route = Screen.Preferences.route) {
@@ -263,21 +217,41 @@ fun NavGraphBuilder.graph(
                 scaffoldState = scaffoldState,
                 navController = navController,
                 scope = scope,
-                stardeosViewModel = stardeosViewModel,
-                viewModel = viewModel()
+                viewModel = viewModel(),
+                settingsSharedPreferences = settingsSharedPreferences
             )
         }
     }
 }
 
-// Navigations
+// NAVIGATION
+
+// Get current destination
 @Composable
 fun currentDestination(navController: NavHostController): NavDestination? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     return navBackStackEntry?.destination
 }
 
+// Navigate with backstack
+/*
 fun navigateTo(
+    currentDestination: NavDestination?,
+    navController: NavHostController,
+    navigateToRoute: String
+) {
+    if (currentDestination?.route != navigateToRoute) {
+        navController.navigate(navigateToRoute)
+    }
+}
+
+fun navigateTo(navController: NavHostController, navigateTo: String) {
+    navController.navigate(navigateTo)
+}
+*/
+
+// Navigate without backstack
+fun navigateToClearingBackstack(
     currentDestination: NavDestination?,
     navController: NavHostController,
     navigateToRoute: String
@@ -291,7 +265,7 @@ fun navigateTo(
     }
 }
 
-fun navigateTo(navController: NavHostController, navigateTo: String){
+fun navigateToClearingBackstack(navController: NavHostController, navigateTo: String) {
     navController.navigate(navigateTo) {
         // Clear backstack
         popUpTo(0)
@@ -299,119 +273,114 @@ fun navigateTo(navController: NavHostController, navigateTo: String){
     }
 }
 
-// TopBar
+// TOP BAR
 @Composable
-fun StardeosTopBar(navController: NavHostController, stardeosViewModel: StardeosViewModel) {
-    val currentDestination = currentDestination(navController)
+fun StardeosTopBar(
+    navController: NavHostController,
+    currentDestination: NavDestination,
+    settingsSharedPreferences: SettingsSharedPreferences
+) {
     TopAppBar(
         title = {
-            Image(
-                painter = painterResource(id = R.drawable.stardeos_banner_nologo),
-                contentDescription = "Banner",
-                modifier = Modifier
-                    .clickable {
-                        navigateTo(currentDestination, navController, Screen.Trends.route)
-                    }
-            )
-        },
-        navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.stardeos),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .clickable {
-                        navigateTo(currentDestination, navController, Screen.Trends.route)
-                    }
-            )
-        },
-        elevation = 12.dp,
-        actions = {
-            if (currentDestination?.route != Screen.Video.route) {
-                IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search"
-                    )
-                }
-
+            if ((currentDestination.route == Screen.Trends.route) || (currentDestination.route == Screen.Following.route) || (currentDestination.route == Screen.EditProfile.route) || (currentDestination.route == Screen.Video.route)) {
                 Image(
-                    painter = painterResource(R.drawable.stardeos),
-                    contentDescription = "ProfileIcon",
-                    contentScale = ContentScale.Crop,
+                    painter = painterResource(id = R.drawable.stardeos_banner_nologo),
+                    contentDescription = "Banner",
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .border(
-                            1.dp,
-                            MaterialTheme.colors.surface, CircleShape
-                        )
                         .clickable {
-                            navController.navigate(Screen.Config.route)
+                            navigateToClearingBackstack(
+                                currentDestination,
+                                navController,
+                                trendsScreen
+                            )
                         }
                 )
-
-                /*IconButton(onClick = { navController.navigate(Screen.Config.route) }) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "ProfileIcon",
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .border(
-                                2.dp,
-                                Color.Black, CircleShape
-                            )
-                    )
-                }*/
-
+            } else {
+                currentDestination.route?.let { Text(text = it) }
             }
         },
-        modifier = Modifier.fillMaxWidth(),
-        backgroundColor = MaterialTheme.colors.primary
-    )
-}
-
-@Composable
-fun StardeosSecondaryTopBar(
-    navController: NavHostController,
-    screenName: String,
-    stardeosViewModel: StardeosViewModel
-) {
-    val currentDestination = currentDestination(navController)
-    TopAppBar(
-        title = {
-            Text(text = screenName)
-        },
         navigationIcon = {
-            IconButton(onClick = {
-                when (currentDestination?.route) {
-                    Screen.Config.route -> {
-                        navigateTo(currentDestination, navController, Screen.Trends.route)
+            if ((currentDestination.route == Screen.Trends.route) || (currentDestination.route == Screen.Following.route) || (currentDestination.route == Screen.EditProfile.route) || (currentDestination.route == Screen.Video.route)) {
+                Image(
+                    painter = painterResource(id = R.drawable.stardeos),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .clickable {
+                            navigateToClearingBackstack(
+                                currentDestination,
+                                navController,
+                                trendsScreen
+                            )
+                        }
+                )
+            } else {
+                IconButton(onClick = {
+                    when (currentDestination.route) {
+                        Screen.Config.route -> {
+                            navigateToClearingBackstack(
+                                currentDestination,
+                                navController,
+                                trendsScreen
+                            )
+                        }
+                        Screen.Preferences.route -> {
+                            navigateToClearingBackstack(
+                                currentDestination,
+                                navController,
+                                configScreen
+                            )
+                        }
+                        else -> {
+                            navigateToClearingBackstack(
+                                currentDestination,
+                                navController,
+                                trendsScreen
+                            )
+                        }
                     }
-                    Screen.Preferences.route -> {
-                        navigateTo(currentDestination, navController, Screen.Config.route)
-                    }
-                    else -> {
-                        navigateTo(currentDestination, navController, Screen.Trends.route)
-                    }
+                }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
-            }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
             }
         },
         elevation = 12.dp,
         actions = {
-            if (currentDestination?.route == Screen.Config.route) {
-                Text(
-                    text = signOut,
-                    modifier = Modifier.clickable {
-                        stardeosViewModel.setStateLogged(false)
-                        navController.navigate(Screen.Login.route) {
-                            // Clear backstack
-                            popUpTo(0)
-                            launchSingleTop = true
-                        }
-                        // SharedPreferences logout
-                    })
+            if ((currentDestination.route == Screen.Trends.route) || (currentDestination.route == Screen.Following.route) || (currentDestination.route == Screen.EditProfile.route)) {
+                if (currentDestination.route != Screen.Video.route) {
+                    IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search"
+                        )
+                    }
+                    Image(
+                        painter = painterResource(R.drawable.stardeos),
+                        contentDescription = "ProfileIcon",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .border(
+                                1.dp,
+                                MaterialTheme.colors.surface, CircleShape
+                            )
+                            .clickable {
+                                navController.navigate(Screen.Config.route)
+                            }
+                    )
+                }
+            } else {
+                if (currentDestination.route == Screen.Config.route) {
+                    Text(
+                        text = signOut,
+                        modifier = Modifier.clickable {
+                            settingsSharedPreferences.setBoolean(
+                                SettingsSharedPreferences.isLoggedKey,
+                                false
+                            )
+                            navigateToClearingBackstack(navController, loginScreen)
+                        })
+                }
             }
         },
         modifier = Modifier.fillMaxWidth(),
@@ -419,7 +388,7 @@ fun StardeosSecondaryTopBar(
     )
 }
 
-// BottomNavigation
+// BOTTOM NAVIGATION
 data class StardeosBottomNavItem(val name: String, val route: String, val icon: ImageVector)
 
 @Composable

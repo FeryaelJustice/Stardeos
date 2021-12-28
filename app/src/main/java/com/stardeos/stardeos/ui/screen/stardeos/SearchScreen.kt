@@ -23,11 +23,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.stardeos.stardeos.data.model.*
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
 import com.stardeos.stardeos.ui.navigation.searchScreenNavName
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
 import com.stardeos.stardeos.ui.viewmodel.stardeos.SearchViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -35,10 +35,10 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun SearchScreen(
     scaffoldState: ScaffoldState,
-    navController: NavController,
+    navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel,
-    viewModel: SearchViewModel
+    viewModel: SearchViewModel,
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     //val query = viewModel.query.value
     val query = remember { mutableStateOf("") }

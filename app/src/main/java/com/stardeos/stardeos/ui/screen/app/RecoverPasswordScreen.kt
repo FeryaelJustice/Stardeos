@@ -22,11 +22,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.stardeos.stardeos.R
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
 import com.stardeos.stardeos.ui.util.StardeosButtonColors
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
 import com.stardeos.stardeos.ui.viewmodel.app.RecoverPasswordViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,10 +34,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun RecoverPasswordScreen(
     scaffoldState: ScaffoldState,
-    navController: NavController,
+    navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel,
-    viewModel: RecoverPasswordViewModel
+    viewModel: RecoverPasswordViewModel,
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
     LazyColumn(

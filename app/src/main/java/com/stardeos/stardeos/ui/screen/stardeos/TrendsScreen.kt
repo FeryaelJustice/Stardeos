@@ -9,21 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.stardeos.stardeos.R
+import com.stardeos.stardeos.data.provider.local.SettingsSharedPreferences
 import com.stardeos.stardeos.ui.navigation.Screen
 import com.stardeos.stardeos.ui.util.StardeosButtonColors
-import com.stardeos.stardeos.ui.viewmodel.StardeosViewModel
 import com.stardeos.stardeos.ui.viewmodel.stardeos.TrendsViewModel
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun TrendsScreen(
     scaffoldState: ScaffoldState,
-    navController: NavController,
+    navController: NavHostController,
     scope: CoroutineScope,
-    stardeosViewModel: StardeosViewModel,
-    viewModel: TrendsViewModel
+    viewModel: TrendsViewModel,
+    settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
     LazyColumn(
