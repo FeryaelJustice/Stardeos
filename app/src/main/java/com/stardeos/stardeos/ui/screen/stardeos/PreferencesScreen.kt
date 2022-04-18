@@ -22,14 +22,16 @@ fun PreferencesScreen(
     settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
-    val isDarkTheme = settingsSharedPreferences.getBoolean(SettingsSharedPreferences.isDarkThemeKey)
-    val theme = if (isDarkTheme) "Night Mode" else "Light Mode"
+    var isDarkTheme = settingsSharedPreferences.getBoolean(SettingsSharedPreferences.isDarkThemeKey)
+    var theme = if (isDarkTheme) "Night Mode" else "Light Mode"
     Row {
         Button(colors = StardeosButtonColors(), onClick = {
             settingsSharedPreferences.setBoolean(
                 SettingsSharedPreferences.isDarkThemeKey,
                 isDarkTheme
             )
+            isDarkTheme = settingsSharedPreferences.getBoolean(SettingsSharedPreferences.isDarkThemeKey)
+            theme =  if (isDarkTheme) "Night Mode" else "Light Mode"
             //ProcessPhoenix.triggerRebirth(context)
         }) {
             Text(text = "Toggle Theme")

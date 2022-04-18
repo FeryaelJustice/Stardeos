@@ -1,5 +1,6 @@
 package com.stardeos.stardeos.ui.screen.stardeos
 
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Button
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -22,10 +23,14 @@ fun ConfigScreen(
     settingsSharedPreferences: SettingsSharedPreferences
 ) {
     val context = LocalContext.current
-    Text(text = configScreenNavName(context))
-    Button(
-        colors = StardeosButtonColors(),
-        onClick = { navController.navigate(Screen.Preferences.route) }) {
-        Text(text = "Preferences")
+    LazyRow{
+        item(){
+            Text(text = configScreenNavName(context))
+            Button(
+                colors = StardeosButtonColors(),
+                onClick = { navController.navigate(Screen.Preferences.route) }) {
+                Text(text = "Preferences")
+            }
+        }
     }
 }
